@@ -1,0 +1,60 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+class SmartDevice {
+public:
+    virtual void turnOn() = 0;
+    virtual void turnoff() = 0;
+    virtual std::string getStatus() const = 0;
+};
+
+class SmartLight : public SmartDevice {
+private:
+    bool isOn;
+public:
+    SmartLight() : isOn(false) {}
+
+    void turnOn() override {
+        isOn = true;
+        std::cout << "Smart Light is turned ON." << std::endl;
+    }
+
+    void turnoff() override {
+        isOn = false;
+        std::cout << "Smart Light is turned OFF." << std::endl;
+    }
+
+    std::string getStatus() const override {
+        return isOn ? "ON" : "OFF";
+    }
+};
+
+void processVoiceCommand(const std::string& command, SmartDevice& device) {
+    if (command == "turn on") {
+        device.turnOn();
+    } else if (command == "turn off") {
+        device.turnoff();
+    } else {
+        std::cout << "Unknown command: " << command << std::endl;
+    }
+}
+
+void controlDeviceFromApp(const std::string& action, SmartDevice& device) {
+    if (action == "turn on") {
+        device.turnOn();
+    } else if (action == "turn off") {
+        device.turnoff();
+    } else {
+        std::cout << "Invalid action: " << action << std::endl;
+    }
+}
+
+int main() {
+    SmartLight livingRoomLight;
+    processVoiceCommand("turn on", livingRoomLight);
+    std::cout << "Living Room Light Status: " << livingRoomLight.getStatus() << std::endl;
+    controlDeviceFromApp("turn off", livingRoomLight);
+    std::cout << "Living Room Light Status: " << livingRoomLight.getStatus() << std::endl;
+    return 0;
+}
